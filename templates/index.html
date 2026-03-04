@@ -275,6 +275,35 @@
             font-size: 13px;
             cursor: pointer;
         }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 16px;
+            background: #1a1a2e;
+            border-bottom: 1px solid #2a2a4a;
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Card level indicator */
+        .card-level {
+            font-size: 11px;
+            color: #555;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+
+        /* Undo button */
+        .btn-undo {
+            background: #2a2a4a;
+            color: #888;
+        }
+        .btn-undo:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -286,6 +315,13 @@
         </div>
     </div>
 
+    <!-- Stats bar -->
+    <div class="stats-bar" id="dailyStats">
+        <span>Today: 0 reviewed</span>
+        <span>0 new</span>
+        <span>0 day streak</span>
+    </div>
+
     <div class="tabs">
         <button class="tab active" onclick="switchTab('flashcard')">Flashcards</button>
         <button class="tab" onclick="switchTab('list')">Word List</button>
@@ -293,7 +329,14 @@
 
     <!-- Flashcard View -->
     <div class="view active" id="flashcardView">
+        <div class="filter-bar" id="flashcardFilterBar">
+            <button class="filter-btn active" onclick="setFlashcardFilter('all', this)">All</button>
+            <button class="filter-btn" onclick="setFlashcardFilter('unseen', this)">Unseen</button>
+            <button class="filter-btn" onclick="setFlashcardFilter('unknown', this)">Don't Know</button>
+            <button class="filter-btn" onclick="setFlashcardFilter('known', this)">Know</button>
+        </div>
         <div class="flashcard-container">
+            <div class="card-level" id="cardLevel"></div>
             <div class="card-counter" id="cardCounter"></div>
             <div class="flashcard" id="flashcard" onclick="flipCard()">
                 <div class="word" id="cardWord">Loading...</div>
@@ -308,6 +351,7 @@
                 <button class="btn btn-know" onclick="markWord(true)">Know It</button>
             </div>
             <div class="actions">
+                <button class="btn btn-undo" id="undoBtn" onclick="goBack()" disabled>Undo</button>
                 <button class="btn btn-shuffle" onclick="shuffleCards()">Shuffle</button>
                 <button class="btn btn-next" onclick="nextCard()">Next</button>
             </div>
@@ -335,7 +379,12 @@
         let isFlipped = false;
         let progress = {};
         let currentFilter = 'all';
+        let flashcardFilter = 'all';
         let cardOrder = [];
+        let levels = {};
+        let dailyStats = {};
+        let streakData = { current: 0, lastDate: null };
+        let lastAction = null; // for undo
         let showChinese = JSON.parse(localStorage.getItem('gmat_show_zh') ?? 'true');
 
         function toggleChinese() {
@@ -353,11 +402,15 @@
             const resp = await fetch('/api/words');
             words = await resp.json();
             progress = JSON.parse(localStorage.getItem('gmat_progress') || '{}');
-            cardOrder = words.map((_, i) => i);
+            levels = JSON.parse(localStorage.getItem('gmat_levels') || '{}');
+            dailyStats = JSON.parse(localStorage.getItem('gmat_daily') || '{}');
+            streakData = JSON.parse(localStorage.getItem('gmat_streak') || '{"current":0,"lastDate":null}');
             document.getElementById('langToggle').classList.toggle('active', showChinese);
+            updateStreak();
             updateProgress();
-            showCard();
+            rebuildCardOrder();
             renderList();
+            renderStats();
         }
 
         function saveProgress() {
@@ -365,10 +418,58 @@
             updateProgress();
         }
 
+        function saveLevels() {
+            localStorage.setItem('gmat_levels', JSON.stringify(levels));
+        }
+
         function updateProgress() {
             const known = Object.values(progress).filter(v => v === 'known').length;
             const total = words.length;
             document.getElementById('progressText').textContent = `${known} known / ${total} total`;
+        }
+
+        // === Flashcard filter ===
+        function setFlashcardFilter(filter, btn) {
+            flashcardFilter = filter;
+            document.querySelectorAll('#flashcardFilterBar .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            rebuildCardOrder();
+        }
+
+        function rebuildCardOrder() {
+            let candidates = [];
+            words.forEach((w, i) => {
+                const status = progress[w.word] || 'unseen';
+                if (flashcardFilter === 'all' || status === flashcardFilter) {
+                    const level = levels[w.word] || 0;
+                    const weight = 5 - level;
+                    candidates.push({ index: i, weight });
+                }
+            });
+
+            // Weighted shuffle: lower-level words appear earlier
+            candidates.sort((a, b) => {
+                const ra = -Math.log(Math.random()) / a.weight;
+                const rb = -Math.log(Math.random()) / b.weight;
+                return ra - rb;
+            });
+
+            cardOrder = candidates.map(c => c.index);
+            currentIndex = 0;
+
+            if (cardOrder.length === 0) {
+                document.getElementById('cardWord').textContent = 'No words match';
+                document.getElementById('cardPos').classList.add('hidden');
+                document.getElementById('cardDef').classList.add('hidden');
+                document.getElementById('cardDefZh').classList.add('hidden');
+                document.getElementById('cardAllDefs').classList.add('hidden');
+                document.getElementById('tapHint').textContent = 'Try a different filter';
+                document.getElementById('tapHint').classList.remove('hidden');
+                document.getElementById('cardCounter').textContent = '0 / 0';
+                document.getElementById('cardLevel').textContent = '';
+            } else {
+                showCard();
+            }
         }
 
         // Tab switching
@@ -387,7 +488,7 @@
 
         // Flashcard
         function showCard() {
-            if (words.length === 0) return;
+            if (words.length === 0 || cardOrder.length === 0) return;
             const idx = cardOrder[currentIndex];
             const w = words[idx];
             isFlipped = false;
@@ -395,6 +496,10 @@
             document.getElementById('cardPos').textContent = w.pos;
             document.getElementById('cardDef').textContent = w.definition;
             document.getElementById('cardDefZh').textContent = w.definition_zh || '';
+
+            // Level indicator
+            const level = levels[w.word] || 0;
+            document.getElementById('cardLevel').textContent = '\u25CF'.repeat(level) + '\u25CB'.repeat(4 - level);
 
             // Render all definitions
             const allDefsEl = document.getElementById('cardAllDefs');
@@ -410,13 +515,14 @@
             document.getElementById('cardDef').classList.add('hidden');
             document.getElementById('cardDefZh').classList.add('hidden');
             document.getElementById('cardAllDefs').classList.add('hidden');
+            document.getElementById('tapHint').textContent = 'Tap to reveal';
             document.getElementById('tapHint').classList.remove('hidden');
             document.getElementById('cardCounter').textContent =
                 `${currentIndex + 1} / ${cardOrder.length}`;
         }
 
         function flipCard() {
-            if (isFlipped) return;
+            if (isFlipped || cardOrder.length === 0) return;
             isFlipped = true;
             document.getElementById('cardPos').classList.remove('hidden');
             document.getElementById('cardDef').classList.remove('hidden');
@@ -426,25 +532,80 @@
         }
 
         function nextCard() {
+            if (cardOrder.length === 0) return;
             currentIndex = (currentIndex + 1) % cardOrder.length;
             showCard();
         }
 
+        // === Undo ===
+        function goBack() {
+            if (!lastAction) return;
+            const { word, oldProgress, oldLevel, cardIndex } = lastAction;
+            // Restore old state
+            if (oldProgress === undefined) {
+                delete progress[word];
+            } else {
+                progress[word] = oldProgress;
+            }
+            if (oldLevel === undefined) {
+                delete levels[word];
+            } else {
+                levels[word] = oldLevel;
+            }
+            saveProgress();
+            saveLevels();
+            lastAction = null;
+            document.getElementById('undoBtn').disabled = true;
+            // Go back to that card
+            if (flashcardFilter !== 'all') {
+                rebuildCardOrder();
+                // Find the word in the new order
+                const wordIdx = words.findIndex(w => w.word === word);
+                const orderIdx = cardOrder.indexOf(wordIdx);
+                if (orderIdx !== -1) currentIndex = orderIdx;
+            } else {
+                currentIndex = cardIndex;
+            }
+            showCard();
+            renderList();
+        }
+
         function markWord(known) {
+            if (cardOrder.length === 0) return;
             const idx = cardOrder[currentIndex];
             const w = words[idx];
+
+            // Save undo state
+            lastAction = {
+                word: w.word,
+                oldProgress: progress[w.word],
+                oldLevel: levels[w.word],
+                cardIndex: currentIndex
+            };
+            document.getElementById('undoBtn').disabled = false;
+
+            // Record daily stats BEFORE updating progress
+            recordReview(w.word, known);
+            bumpStreak();
+
+            // Update progress
             progress[w.word] = known ? 'known' : 'unknown';
+
+            // Update spaced repetition level
+            const currentLevel = levels[w.word] || 0;
+            levels[w.word] = known ? Math.min(currentLevel + 1, 4) : 0;
+            saveLevels();
             saveProgress();
-            nextCard();
+
+            if (flashcardFilter !== 'all') {
+                rebuildCardOrder();
+            } else {
+                nextCard();
+            }
         }
 
         function shuffleCards() {
-            for (let i = cardOrder.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
-            }
-            currentIndex = 0;
-            showCard();
+            rebuildCardOrder();
         }
 
         // Word list
@@ -478,16 +639,77 @@
 
         function setFilter(filter) {
             currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('#listView .filter-btn').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
             renderList();
+        }
+
+        // === Daily stats ===
+        function todayKey() {
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function recordReview(word, known) {
+            const today = todayKey();
+            if (!dailyStats[today]) {
+                dailyStats[today] = { reviewed: 0, newLearned: 0 };
+            }
+            dailyStats[today].reviewed++;
+            const wasPreviouslyKnown = progress[word] === 'known';
+            if (known && !wasPreviouslyKnown) {
+                dailyStats[today].newLearned++;
+            }
+            localStorage.setItem('gmat_daily', JSON.stringify(dailyStats));
+            renderStats();
+        }
+
+        function updateStreak() {
+            const today = todayKey();
+            const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+            if (streakData.lastDate === today || streakData.lastDate === yesterday) {
+                return; // streak is current
+            } else if (streakData.lastDate !== null) {
+                streakData.current = 0;
+                localStorage.setItem('gmat_streak', JSON.stringify(streakData));
+            }
+        }
+
+        function bumpStreak() {
+            const today = todayKey();
+            if (streakData.lastDate !== today) {
+                const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+                streakData.current = (streakData.lastDate === yesterday) ? streakData.current + 1 : 1;
+                streakData.lastDate = today;
+                localStorage.setItem('gmat_streak', JSON.stringify(streakData));
+                renderStats();
+            }
+        }
+
+        function renderStats() {
+            const today = todayKey();
+            const todayData = dailyStats[today] || { reviewed: 0, newLearned: 0 };
+            document.getElementById('dailyStats').innerHTML = `
+                <span>Today: ${todayData.reviewed} reviewed</span>
+                <span>${todayData.newLearned} new</span>
+                <span>${streakData.current} day streak</span>
+            `;
         }
 
         function resetProgress() {
             if (confirm('Reset all progress? This cannot be undone.')) {
                 progress = {};
+                levels = {};
+                dailyStats = {};
+                streakData = { current: 0, lastDate: null };
+                lastAction = null;
+                document.getElementById('undoBtn').disabled = true;
                 saveProgress();
+                saveLevels();
+                localStorage.setItem('gmat_daily', '{}');
+                localStorage.setItem('gmat_streak', JSON.stringify(streakData));
+                rebuildCardOrder();
                 renderList();
+                renderStats();
             }
         }
 
@@ -496,6 +718,7 @@
             if (e.target.tagName === 'INPUT') return;
             if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
             if (e.key === 'ArrowRight' || e.key === 'n') nextCard();
+            if (e.key === 'ArrowLeft' || e.key === 'u') goBack();
             if (e.key === 'k') markWord(true);
             if (e.key === 'j') markWord(false);
         });
