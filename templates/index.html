@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>GMAT 800 Vocab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1a2e;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .header h1 { font-size: 18px; color: #8b5cf6; }
+        .progress-text { font-size: 13px; color: #888; }
+        .lang-toggle {
+            padding: 4px 10px;
+            border-radius: 14px;
+            border: 1px solid #3a3a5a;
+            background: none;
+            color: #f0c040;
+            font-size: 12px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        .lang-toggle.active {
+            background: #f0c040;
+            color: #0f0f1a;
+            border-color: #f0c040;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: #1a1a2e;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        .tab.active {
+            color: #8b5cf6;
+            border-bottom: 2px solid #8b5cf6;
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px;
+            min-height: calc(100vh - 140px);
+        }
+        .card-counter {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        .flashcard {
+            width: 100%;
+            max-width: 400px;
+            min-height: 280px;
+            background: #1e1e36;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 24px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid #2a2a4a;
+            position: relative;
+        }
+        .flashcard:active { transform: scale(0.98); }
+        .flashcard .word {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .flashcard .pos {
+            font-size: 14px;
+            color: #8b5cf6;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+        .flashcard .definition {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #ccc;
+            text-align: center;
+        }
+        .flashcard .definition-zh {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #f0c040;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .flashcard .all-defs {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #999;
+            text-align: left;
+            width: 100%;
+        }
+        .flashcard .all-defs .def-item {
+            margin-bottom: 6px;
+            padding-left: 12px;
+            border-left: 2px solid #3a3a5a;
+        }
+        .flashcard .all-defs .def-pos {
+            color: #8b5cf6;
+            font-size: 12px;
+        }
+        .flashcard .tap-hint {
+            position: absolute;
+            bottom: 12px;
+            font-size: 12px;
+            color: #555;
+        }
+        .hidden { display: none; }
+
+        /* Action buttons */
+        .actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:active { opacity: 0.7; }
+        .btn-know {
+            background: #22c55e;
+            color: #fff;
+        }
+        .btn-dont-know {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-next {
+            background: #8b5cf6;
+            color: #fff;
+        }
+        .btn-shuffle {
+            background: #2a2a4a;
+            color: #ccc;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            overflow-x: auto;
+        }
+        .filter-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #3a3a5a;
+            background: none;
+            color: #999;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .filter-btn.active {
+            background: #8b5cf6;
+            color: #fff;
+            border-color: #8b5cf6;
+        }
+
+        /* Word list */
+        .word-list {
+            padding: 0 16px 80px;
+        }
+        .word-item {
+            background: #1e1e36;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid #2a2a4a;
+            transition: background 0.2s;
+        }
+        .word-item:active { background: #2a2a4a; }
+        .word-item .word-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .word-item .word-def {
+            font-size: 14px;
+            color: #999;
+            margin-top: 4px;
+            display: none;
+        }
+        .word-item.expanded .word-def { display: block; }
+        .word-item .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-dot.known { background: #22c55e; }
+        .status-dot.unknown { background: #ef4444; }
+        .status-dot.unseen { background: #555; }
+
+        /* Search */
+        .search-bar {
+            padding: 8px 16px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #3a3a5a;
+            background: #1e1e36;
+            color: #e0e0e0;
+            font-size: 15px;
+            outline: none;
+        }
+        .search-input:focus { border-color: #8b5cf6; }
+        .search-input::placeholder { color: #555; }
+
+        /* View containers */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* Reset button */
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #2a2a4a;
+            color: #888;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GMAT 800</h1>
+        <div>
+            <button class="lang-toggle active" id="langToggle" onclick="toggleChinese()">CN</button>
+            <span class="progress-text" id="progressText">0 / 0</span>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('flashcard')">Flashcards</button>
+        <button class="tab" onclick="switchTab('list')">Word List</button>
+    </div>
+
+    <!-- Flashcard View -->
+    <div class="view active" id="flashcardView">
+        <div class="flashcard-container">
+            <div class="card-counter" id="cardCounter"></div>
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="word" id="cardWord">Loading...</div>
+                <div class="pos hidden" id="cardPos"></div>
+                <div class="definition hidden" id="cardDef"></div>
+                <div class="definition-zh hidden" id="cardDefZh"></div>
+                <div class="all-defs hidden" id="cardAllDefs"></div>
+                <div class="tap-hint" id="tapHint">Tap to reveal</div>
+            </div>
+            <div class="actions">
+                <button class="btn btn-dont-know" onclick="markWord(false)">Don't Know</button>
+                <button class="btn btn-know" onclick="markWord(true)">Know It</button>
+            </div>
+            <div class="actions">
+                <button class="btn btn-shuffle" onclick="shuffleCards()">Shuffle</button>
+                <button class="btn btn-next" onclick="nextCard()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- List View -->
+    <div class="view" id="listView">
+        <div class="search-bar">
+            <input class="search-input" id="searchInput" type="text" placeholder="Search words..." oninput="filterList()">
+        </div>
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="setFilter('all')">All</button>
+            <button class="filter-btn" onclick="setFilter('unseen')">Unseen</button>
+            <button class="filter-btn" onclick="setFilter('unknown')">Don't Know</button>
+            <button class="filter-btn" onclick="setFilter('known')">Know</button>
+        </div>
+        <div class="word-list" id="wordList"></div>
+        <button class="reset-btn" onclick="resetProgress()">Reset All Progress</button>
+    </div>
+
+    <script>
+        let words = [];
+        let currentIndex = 0;
+        let isFlipped = false;
+        let progress = {};
+        let currentFilter = 'all';
+        let cardOrder = [];
+        let showChinese = JSON.parse(localStorage.getItem('gmat_show_zh') ?? 'true');
+
+        function toggleChinese() {
+            showChinese = !showChinese;
+            localStorage.setItem('gmat_show_zh', JSON.stringify(showChinese));
+            document.getElementById('langToggle').classList.toggle('active', showChinese);
+            if (isFlipped) {
+                document.getElementById('cardDefZh').classList.toggle('hidden', !showChinese);
+            }
+            renderList();
+        }
+
+        // Load data
+        async function init() {
+            const resp = await fetch('/api/words');
+            words = await resp.json();
+            progress = JSON.parse(localStorage.getItem('gmat_progress') || '{}');
+            cardOrder = words.map((_, i) => i);
+            document.getElementById('langToggle').classList.toggle('active', showChinese);
+            updateProgress();
+            showCard();
+            renderList();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('gmat_progress', JSON.stringify(progress));
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const known = Object.values(progress).filter(v => v === 'known').length;
+            const total = words.length;
+            document.getElementById('progressText').textContent = `${known} known / ${total} total`;
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            if (tab === 'flashcard') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('flashcardView').classList.add('active');
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('listView').classList.add('active');
+                renderList();
+            }
+        }
+
+        // Flashcard
+        function showCard() {
+            if (words.length === 0) return;
+            const idx = cardOrder[currentIndex];
+            const w = words[idx];
+            isFlipped = false;
+            document.getElementById('cardWord').textContent = w.word;
+            document.getElementById('cardPos').textContent = w.pos;
+            document.getElementById('cardDef').textContent = w.definition;
+            document.getElementById('cardDefZh').textContent = w.definition_zh || '';
+
+            // Render all definitions
+            const allDefsEl = document.getElementById('cardAllDefs');
+            if (w.all_definitions && w.all_definitions.length > 1) {
+                allDefsEl.innerHTML = w.all_definitions.map(d =>
+                    `<div class="def-item"><span class="def-pos">${d.pos}</span> ${d.def}</div>`
+                ).join('');
+            } else {
+                allDefsEl.innerHTML = '';
+            }
+
+            document.getElementById('cardPos').classList.add('hidden');
+            document.getElementById('cardDef').classList.add('hidden');
+            document.getElementById('cardDefZh').classList.add('hidden');
+            document.getElementById('cardAllDefs').classList.add('hidden');
+            document.getElementById('tapHint').classList.remove('hidden');
+            document.getElementById('cardCounter').textContent =
+                `${currentIndex + 1} / ${cardOrder.length}`;
+        }
+
+        function flipCard() {
+            if (isFlipped) return;
+            isFlipped = true;
+            document.getElementById('cardPos').classList.remove('hidden');
+            document.getElementById('cardDef').classList.remove('hidden');
+            if (showChinese) document.getElementById('cardDefZh').classList.remove('hidden');
+            document.getElementById('cardAllDefs').classList.remove('hidden');
+            document.getElementById('tapHint').classList.add('hidden');
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % cardOrder.length;
+            showCard();
+        }
+
+        function markWord(known) {
+            const idx = cardOrder[currentIndex];
+            const w = words[idx];
+            progress[w.word] = known ? 'known' : 'unknown';
+            saveProgress();
+            nextCard();
+        }
+
+        function shuffleCards() {
+            for (let i = cardOrder.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cardOrder[i], cardOrder[j]] = [cardOrder[j], cardOrder[i]];
+            }
+            currentIndex = 0;
+            showCard();
+        }
+
+        // Word list
+        function renderList() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const container = document.getElementById('wordList');
+
+            const filtered = words.filter((w, i) => {
+                if (search && !w.word.toLowerCase().includes(search)) return false;
+                const status = progress[w.word] || 'unseen';
+                if (currentFilter !== 'all' && status !== currentFilter) return false;
+                return true;
+            });
+
+            container.innerHTML = filtered.map(w => {
+                const status = progress[w.word] || 'unseen';
+                return `<div class="word-item" onclick="this.classList.toggle('expanded')">
+                    <div class="word-title">
+                        <span>${w.word}</span>
+                        <span class="status-dot ${status}"></span>
+                    </div>
+                    <div class="word-def">
+                        <em>${w.pos}</em> — ${w.definition}
+                        ${showChinese && w.definition_zh ? `<div style="color:#f0c040;margin-top:4px">${w.definition_zh}</div>` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function filterList() { renderList(); }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderList();
+        }
+
+        function resetProgress() {
+            if (confirm('Reset all progress? This cannot be undone.')) {
+                progress = {};
+                saveProgress();
+                renderList();
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+            if (e.key === 'ArrowRight' || e.key === 'n') nextCard();
+            if (e.key === 'k') markWord(true);
+            if (e.key === 'j') markWord(false);
+        });
+
+        // Swipe support
+        let touchStartX = 0;
+        document.getElementById('flashcardView').addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        });
+        document.getElementById('flashcardView').addEventListener('touchend', e => {
+            const diff = e.changedTouches[0].clientX - touchStartX;
+            if (Math.abs(diff) > 80) {
+                if (diff > 0) markWord(true);   // Swipe right = know
+                else markWord(false);            // Swipe left = don't know
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>
