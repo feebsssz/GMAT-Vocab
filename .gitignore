@@ -19,3 +19,11 @@ wheels/
 # Claude
 .claude/
 .source/
+
+# Vite / Node
+node_modules/
+dist/
+
+# Env
+.env
+.env.local

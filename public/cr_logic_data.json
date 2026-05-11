@@ -1,0 +1,266 @@
+[
+  {
+    "word": "Premise",
+    "pos": "Argument Structure",
+    "definition": "A stated fact or piece of evidence used to support a conclusion. Premises are accepted as true — you don't challenge them, you build on them.\nIn CR: 'Which of the following, if true, most strengthens the argument?' — the answer adds a new premise.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Conclusion",
+    "pos": "Argument Structure",
+    "definition": "The main point the argument is trying to prove. It follows from the premises.\nSignal words: therefore, thus, hence, so, consequently, as a result, clearly, it follows that.\nIn CR: Always identify the conclusion before answering — every question type depends on it.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Assumption",
+    "pos": "Argument Structure",
+    "definition": "An unstated premise the argument requires to be true. Without the assumption, the conclusion doesn't follow.\nIn CR: 'The argument above assumes which of the following?' — find the gap between the premises and conclusion.\nNegation test: negate the assumption — if the argument falls apart, it's a valid assumption.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Inference",
+    "pos": "Argument Structure",
+    "definition": "A conclusion drawn from evidence — something that must be true if the premises are true. More cautious than a conclusion.\nIn CR: 'Which of the following can be inferred?' — the correct answer follows directly from the stated facts, with no added assumptions.\nDon't go beyond what the passage supports.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Assertion",
+    "pos": "Argument Structure",
+    "definition": "A claim or statement put forward as true, without necessarily providing proof.\nIn CR: An assertion is a claim that may or may not be supported. Recognize when an argument is asserting without sufficient evidence — this is often a flaw.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Contention",
+    "pos": "Argument Structure",
+    "definition": "A point being argued; a position someone maintains in a dispute. Often used interchangeably with 'conclusion' or 'claim.'\ne.g. 'The author's central contention is that…'\nIn CR: Identifying the contention = identifying the conclusion.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Evidence",
+    "pos": "Argument Structure",
+    "definition": "Facts, data, or examples used to support a claim. Evidence = premises in CR.\nIn CR: Strengthening questions ask you to add evidence that supports the conclusion. Weakening questions ask you to add evidence that undercuts it.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Counterargument",
+    "pos": "Argument Structure",
+    "definition": "An argument made against another argument. An objection to the main claim.\nIn CR: Some questions ask you to identify what would be a counterargument, or to strengthen the argument against a counterargument.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Undermine",
+    "pos": "Strengthen / Weaken",
+    "definition": "To weaken or damage the foundation of an argument — to make the conclusion less likely to be true.\nIn CR: 'Which of the following, if true, most undermines the argument?' = weaken question.\nTarget the assumption: if you break the assumption, you undermine the whole argument.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Corroborate",
+    "pos": "Strengthen / Weaken",
+    "definition": "To confirm or support with additional evidence. To strengthen a claim by providing independent evidence that agrees with it.\nIn CR: A corroborating fact strengthens the argument by providing evidence consistent with the conclusion.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Substantiate",
+    "pos": "Strengthen / Weaken",
+    "definition": "To provide concrete evidence to prove or support a claim. Stronger than 'suggest' — implies solid supporting evidence.\nIn CR: 'Which of the following substantiates the author's claim?' = strengthen question. The answer must provide direct support.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Refute",
+    "pos": "Strengthen / Weaken",
+    "definition": "To prove that a claim or argument is wrong — stronger than merely weakening it.\nIn CR: An answer choice that refutes the conclusion disproves it outright. Distinguish from 'weakens' (reduces likelihood) vs. 'refutes' (proves false).",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Bolster",
+    "pos": "Strengthen / Weaken",
+    "definition": "To reinforce or support — to make an argument stronger. Synonym of 'strengthen.'\nIn CR: 'Bolsters the argument' = provides additional support for the conclusion.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Cast doubt",
+    "pos": "Strengthen / Weaken",
+    "definition": "To raise questions about the validity of a claim — to make it seem less certain or trustworthy.\nIn CR: An answer that 'casts doubt' weakens the argument. It doesn't disprove — it creates uncertainty.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Paradox",
+    "pos": "Logical Relationship",
+    "definition": "A situation where two facts seem contradictory but can both be true. Something that appears self-contradictory but has a logical explanation.\nIn CR: 'Resolve the paradox' questions ask you to find the fact that explains why two apparently contradictory statements are both true.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Discrepancy",
+    "pos": "Logical Relationship",
+    "definition": "A difference or inconsistency between two things that should match or agree.\nIn CR: 'Explain the discrepancy' = same as 'resolve the paradox.' Find the answer that reconciles the two conflicting facts.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Reconcile",
+    "pos": "Logical Relationship",
+    "definition": "To make two apparently contradictory things compatible; to explain how both can be true.\nIn CR: 'Which of the following, if true, best reconciles the apparent contradiction?' — find the bridging fact that makes both statements consistent.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Analogous",
+    "pos": "Logical Relationship",
+    "definition": "Similar in function or structure in a way that allows comparison. An analogy draws a parallel between two different situations.\nIn CR: Watch for flawed analogies — two situations may seem analogous but differ in a key way that makes the comparison invalid.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Correlation vs. Causation",
+    "pos": "Logical Relationship",
+    "definition": "Correlation: two things occur together. Causation: one thing causes the other.\nCritical flaw: assuming that because A and B are correlated, A causes B.\nIn CR: A common argument flaw — the argument concludes causation from correlation. Weaken by showing a third factor, reverse causation, or coincidence.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Causal claim",
+    "pos": "Logical Relationship",
+    "definition": "A claim that one thing directly produces or leads to another.\nIn CR: Causal arguments are commonly tested. To weaken: show (1) the cause didn't precede the effect, (2) another cause explains the effect, or (3) the relationship is reversed.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Mitigate",
+    "pos": "Qualifying Terms",
+    "definition": "To reduce the severity, impact, or extent of something. To lessen, but not eliminate.\nIn CR: A factor that 'mitigates' a problem makes it less serious, but doesn't solve it. Important for evaluate and weaken questions.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Exacerbate",
+    "pos": "Qualifying Terms",
+    "definition": "To make a problem or situation worse; to aggravate.\nIn CR: An answer that exacerbates the problem weakens a plan or solution — it shows the solution will make things worse, not better.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Alleviate",
+    "pos": "Qualifying Terms",
+    "definition": "To partially relieve or reduce a problem. Similar to mitigate — suggests improvement but not complete resolution.\nIn CR: Distinguishing 'alleviates' from 'solves' is important — an answer may only partially address the issue.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Sufficient",
+    "pos": "Qualifying Terms",
+    "definition": "Enough on its own to guarantee a result. If X is sufficient for Y, then X → Y.\nIn CR: 'A sufficient condition' produces the result by itself. Distinguished from 'necessary' — a sufficient condition isn't always necessary.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Necessary",
+    "pos": "Qualifying Terms",
+    "definition": "Required for a result to occur, but not enough on its own to guarantee it. If X is necessary for Y, then without X, no Y.\nIn CR: 'A necessary condition' must be present, but alone doesn't cause the outcome. Assumptions are necessary conditions for an argument.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Feasible",
+    "pos": "Qualifying Terms",
+    "definition": "Possible and practical to do or achieve; workable.\nIn CR: A plan being 'feasible' means it's logically possible — not guaranteed to work. Watch for answer choices that confuse feasibility with certainty.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Plausible",
+    "pos": "Qualifying Terms",
+    "definition": "Seeming reasonable or probable; believable.\nIn CR: A 'plausible explanation' is one that could be true. Distinguish from 'proven' — plausible ≠ definitely true.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Imply",
+    "pos": "Inference Terms",
+    "definition": "To suggest something without stating it directly. What is implied is not explicitly said but can be reasonably understood.\nIn CR: 'The passage implies…' — the answer must be strongly suggested, not just possible.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Conclude",
+    "pos": "Inference Terms",
+    "definition": "To arrive at a judgment based on reasoning. The conclusion is what the reasoning leads to.\nIn CR: 'Which of the following conclusions is best supported?' — find what logically follows from the facts, without going beyond them.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Extrapolate",
+    "pos": "Inference Terms",
+    "definition": "To extend known data or trends beyond the observed range to make predictions.\nIn CR: Extrapolation is a common argument flaw — applying a trend beyond what the data supports. A weaken answer may show the trend doesn't hold in new conditions.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Fallacy",
+    "pos": "Logical Flaws",
+    "definition": "An error in reasoning that makes an argument invalid, even if the conclusion seems plausible.\nIn CR: Common fallacies tested: ad hominem (attacking the person), straw man (misrepresenting the argument), false dichotomy (only two options when more exist), circular reasoning (conclusion restates the premise).",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "False Dichotomy",
+    "pos": "Logical Flaws",
+    "definition": "Presenting only two options when more exist; treating a multi-option situation as either/or.\nIn CR: A common flaw — 'Either we do X or Y will happen.' Weaken by showing a third option exists. Identify in flaw questions.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Hasty Generalization",
+    "pos": "Logical Flaws",
+    "definition": "Drawing a broad conclusion from insufficient or unrepresentative evidence; over-generalizing from a small sample.\nIn CR: 'A study of 10 employees showed X, therefore all employees…' Weaken by showing the sample is too small or unrepresentative.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Circular Reasoning",
+    "pos": "Logical Flaws",
+    "definition": "Using the conclusion as a premise — restating what you're trying to prove as evidence for itself.\ne.g. 'This plan is the best because no other plan is better.'\nIn CR: Identify in 'flaw in the argument' questions.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Ad Hominem",
+    "pos": "Logical Flaws",
+    "definition": "Attacking the person making an argument instead of addressing the argument itself.\nIn CR: A flaw — dismissing a claim because of who said it, not because of the evidence. Identify in 'flaw in the reasoning' questions.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Scope Shift",
+    "pos": "Logical Flaws",
+    "definition": "When a conclusion introduces a new concept not established in the premises — the argument jumps to a broader or different claim than the evidence supports.\nIn CR: One of the most common GMAT flaw types. The assumption bridges the scope shift — find where the argument's scope widens.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Confound",
+    "pos": "Logical Flaws",
+    "definition": "A confounding variable is an outside factor that affects both variables in a study, creating a false impression of a relationship.\nIn CR: Weaken causal arguments by identifying a confounding factor — an alternative explanation for the observed result.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Evaluate",
+    "pos": "CR Question Types",
+    "definition": "In CR 'Evaluate the argument' questions: find the piece of information that would most help determine whether the argument's conclusion is valid.\nThe correct answer raises a question whose answer (yes or no) either strengthens or weakens the argument.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Bold-faced statement",
+    "pos": "CR Question Types",
+    "definition": "In CR: A question type that presents two highlighted statements and asks you to identify their roles in the argument.\nCommon roles: main conclusion, intermediate conclusion, supporting evidence, counterpoint, premise the argument rejects.\nIdentify each statement's function independently, then pick the answer that correctly describes both.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Strengthen",
+    "pos": "CR Question Types",
+    "definition": "Make the argument's conclusion more likely to be true. A strengthening answer supports the assumption or adds evidence that directly supports the conclusion.\nNOT: restating what's already said, true but irrelevant facts, or conclusions that are too broad.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Weaken",
+    "pos": "CR Question Types",
+    "definition": "Make the conclusion less likely to be true. The most effective way to weaken: attack the assumption.\nAlso effective: show the evidence doesn't support the conclusion, or offer an alternative explanation.\nNOT: disprove completely (that would be refute), just reduce likelihood.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Resolve / Explain",
+    "pos": "CR Question Types",
+    "definition": "Find the fact that explains why two seemingly contradictory statements are both true.\nApproach: accept BOTH statements as true, then find what bridges them.\nWrong answer traps: explains only one side, makes one statement false, or is irrelevant to the contradiction.",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Logical Conclusion",
+    "pos": "CR Question Types",
+    "definition": "The statement that must be true given the premises. In 'draw a conclusion' or 'must be true' questions:\n• The answer must follow directly — no outside knowledge needed\n• Beware of answers that are probably true vs. must be true\n• Extreme language ('always,' 'never,' 'all') is usually wrong",
+    "definition_zh": null, "all_definitions": []
+  },
+  {
+    "word": "Analogical Reasoning",
+    "pos": "CR Question Types",
+    "definition": "In 'parallel reasoning' questions: find the answer whose argument structure matches the original, regardless of topic.\nFocus on the logical relationship (e.g., if X then Y; not X; therefore not Y), not the subject matter.\nMap the structure: identify premise type → conclusion type → pick the answer with the same pattern.",
+    "definition_zh": null, "all_definitions": []
+  }
+]
